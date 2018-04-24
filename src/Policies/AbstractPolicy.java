@@ -1,5 +1,11 @@
 package Policies;
 
-public class AbstractPolicy {
 
+public abstract class AbstractPolicy {
+
+	
+	private String name;  // para identificar el policy 
+	
+	//
+	
 }

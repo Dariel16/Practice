@@ -9,7 +9,8 @@ public class Main
 	@SuppressWarnings({ "unchecked", "resource", "rawtypes" })
 	public static void main(String[] args) 
 	{
-		
+		//craer 7 queueus
+		//usar metodo clear para borrar el completedCostumer cada vez que termine de atender a todos,luego usarlo con otro metodo
 		ArrayDeque<Customer> arrCustumers = new ArrayDeque();
 		ArrayDeque<Customer> lineArrQueue = new ArrayDeque();
 		ArrayList<Customer>	completedCustomer = new ArrayList<>();
