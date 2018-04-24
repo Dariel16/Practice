@@ -14,7 +14,7 @@ import dataGenerator2.DataReader;
 public class Part1Main {
 
 /*
- * */
+ * */ 
 	public static void content(String archivo) throws FileNotFoundException, IOException {
 		String s;
 		FileReader f = new FileReader(archivo);
