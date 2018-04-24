@@ -16,7 +16,7 @@ public class Main
 		
 		Scanner in = new Scanner(System.in);
 		
-		System.out.println("Enter how many jobs you want to consider: ");
+		System.out.println("Enter how many customers you want to consider: ");
          
 		int numOfCus = in.nextInt();
 		
@@ -34,7 +34,7 @@ public class Main
 		}
 		
 		double timer = 0;
-		double sumOfTimes = 0;
+		double sumOfTimes = 0;//t1
 		
 		
 		while(!(completedCustomer.size() == arrCustumers.size()))
@@ -50,6 +50,7 @@ public class Main
 				{
 					completedCustomer.add(ctr);
 					sumOfTimes += (timer - ctr.getArrivalEvent());
+					lineArrQueue.poll();
 				}
 				
 //				else
@@ -63,8 +64,14 @@ public class Main
 			timer++;
 		}
 		
-		double result = sumOfTimes/numOfCus;
-		System.out.println("Average time in system is: " + result);
+		
+		
+		//t1- tiempo en que tarda en procesar todos los customers
+		System.out.println("Total time in system is: " + sumOfTimes);
+		double t2 = sumOfTimes/numOfCus; //promedio de esperar del input
+		System.out.printf("Average waiting time for input file:  %.2f" ,t2);
+
+		
 	}
 	
 		private static class Customer{
