@@ -9,4 +9,7 @@ public abstract class AbstractPolicy {
 	//quiero que entre de parametro el array de los deque(filas)
 	abstract void attendPeople();
 	
+	
+	
+	
 }
