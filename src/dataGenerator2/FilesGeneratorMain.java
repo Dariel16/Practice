@@ -1,11 +1,9 @@
-package p2MainClasses;
+package dataGenerator2;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
-
-import dataGenerator2.DataGenerator;
 
 public class FilesGeneratorMain {
 
