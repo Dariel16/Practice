@@ -5,23 +5,26 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 
-
+//1 server 1 fila
+//3 servers 1 fila
+//5 servers 1 fila
+//si un server se vacia,el customer que entra entra a esa fila
+//un vez hace fila,no puede cambiarse
 
 import p2MainClasses.Customer;
-//import p2MainClasses.Main.Customer;
 
-public class MLMS {
+public class MLMS extends AbstractPolicy{
 
 	
 	
 	
-	public MLMS(int name){
-		//super(name);
+	public MLMS(String name){
+		super(name);
 		
 		
 	}
 
-	public static  ArrayList<Integer> evaluate(ArrayDeque<Customer> input, int servers,int numCust){		
+	public  ArrayList<Integer> evaluate(ArrayDeque<Customer> input, int servers,int numCust){		
 		double timer = 0;
 		double sumOfTimes = 0;//t1
 
@@ -61,14 +64,15 @@ public class MLMS {
 		double t2 = sumOfTimes/numCust; //promedio de esperar del input
 		System.out.printf("Average waiting time for input file:  %.2f" ,t2);
 
-		//int T1 =resT1T2M.get(0);
-		//int T2=resT1T2M.get(1);
+		
 		
 		return resT1T2M;
 
 
 	}
-
-
+// metodo booleano que verifica si un server se vacia
+	//hacer metodo que me diga cual es el server vacio con min index
+	//hacer metodo que lo mueva al server vacio
+	
 
 }

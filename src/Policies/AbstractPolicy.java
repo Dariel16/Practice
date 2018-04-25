@@ -1,15 +1,26 @@
 package Policies;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+
+import p2MainClasses.Customer;
 
 public abstract class AbstractPolicy {
 
-	
+
 	private String name;  // para identificar el policy 
-	
-	//quiero que entre de parametro el array de los deque(filas)
-	abstract void attendPeople();
-	
-	
-	
-	
+
+	public AbstractPolicy(String name) {
+		this.name = name; 
+	}
+
+	public String getName() { 
+		return name; 
+	}
+	abstract ArrayList<Integer> evaluate(ArrayDeque<Customer> input, int servers,int numCust);
+
+
+
+
+
 }
