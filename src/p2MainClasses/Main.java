@@ -6,7 +6,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Policies.MLMS;
+import Policies.SLMS;
+
 
 
 
@@ -15,7 +16,7 @@ public class Main
 	@SuppressWarnings({ "unchecked", "resource", "rawtypes" })
 	public static void main(String[] args) 
 	{ 
-		MLMS m1 = new MLMS("MLMS");
+		//MLMS m1 = new MLMS("MLMS");
 		
 		//craer 7 queueus
 		//usar metodo clear para borrar el completedCostumer cada vez que termine de atender a todos,luego usarlo con otro metodo
@@ -42,10 +43,10 @@ public class Main
 			counter++;
 		}
 		  
-		
-		
-		 m1.evaluate(arrCustomers, 1,arrCustomers.size());//inputCustomers, servers,#customers
-		
+		for(int servers=1;servers<=5;servers+=2){
+			SLMS a=new SLMS(servers);	
+			a.evaluate(arrCustomers, servers, numOfCus);
+			}
 		
 		//t1- tiempo en que tarda en procesar todos los customers
 		//System.out.println("Total time in system is: " + sumOfTimes);
