@@ -6,6 +6,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Policies.MLMS;
 import Policies.SLMS;
 
 
@@ -44,7 +45,8 @@ public class Main
 		}
 		  
 		for(int servers=1;servers<=5;servers+=2){
-			SLMS a=new SLMS(servers);	
+			//SLMS a=new SLMS(servers);	
+			MLMS a = new MLMS(servers);
 			a.evaluate(arrCustomers, servers, numOfCus);
 			}
 		
