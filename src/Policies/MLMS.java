@@ -1,5 +1,6 @@
 package Policies;
 import java.util.ArrayDeque;
+
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -17,20 +18,25 @@ public class MLMS {
 	//	}
 
 
-private int servers;
+
 	Map<Integer,Customer>serversMap= new TreeMap<>();
+	//ArrayDeque<Customer> filaAtender = new ArrayDeque<Customer>();// processing	
+	//ArrayDeque<Customer> fila0,fila1,fila2,fila3,fila4 = new ArrayDeque<Customer>();// processing	
 	Map<Integer,ArrayDeque<Customer>> filas =  new TreeMap<>();
+	//ArrayList<ArrayDeque>[] filas = new ArrayList{fila0,fila1,fila2,fila3,fila4};
+	//ArrayList<ArrayDeque> filasEspera=new ArrayList<>();
+	//filasEspera.add(fila0);
+
 	int[] tCurrent;   //guarde valores t que aumentan+1 para llegar y comparar con t+s y sacarlos del map
 
 	private int atendidos=0;
 
 	public MLMS(int servers ) {
 		tCurrent=new int[servers];
-		this.servers = servers;
 
 	}
 
-	public  void  evaluate(ArrayDeque<Customer> input,int numCust){		
+	public  void  evaluate(ArrayDeque<Customer> input, int servers,int numCust){		
 
 	
 		double timer = 0;
@@ -118,7 +124,6 @@ private int servers;
 	//sirve para mover muchos 
 	public Map<Integer ,Customer> checkEmptyServer(int numS){//verifica de menor a mayor los servers,si estan vacios 
 		int serverN=0;
-		@SuppressWarnings("unused")
 		boolean isOccupied=false;
 
 		// while(serverN < numS && isOccupied ==false  && !filaAtender.isEmpty()){// servers de 0 a n
