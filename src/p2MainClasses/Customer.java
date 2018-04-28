@@ -6,20 +6,23 @@ public  class Customer{
 	private int customerS;  // remaining service time for this job
 	private int serviceCompleted;  // time when the service for this job is completed
 	private int currentCustomerTime;
+	private int serviceStart;
+
 	public Customer(int id, int t, int s) { 
 		cusID = id; 
 		arrivalEvent = t;
 		currentCustomerTime= t;
 		customerS = s; 
+
 	}
 	public int getCompletedTime() {
 		return serviceCompleted;
 	}
-	
+
 	public void setCompletedTime(int departureTime) {
 		this.serviceCompleted = departureTime;
 	}
-	
+
 	public int getCusID() {
 		return cusID;
 	}
@@ -35,7 +38,16 @@ public  class Customer{
 	public void setCurrentCustomerTime(int timer) {
 		currentCustomerTime = timer;
 	}
-	
+	public double getServiceStartTime() {
+		return serviceStart;
+	}
+	public void setServiceStartTime(int timer) {
+		serviceStart = timer;
+	}
+	public double getWaitingTime() {
+		return arrivalEvent + serviceStart;
+	}
+
 
 	/**
 	 * Registers an update of serviced received by this job. 

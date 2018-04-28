@@ -45,9 +45,10 @@ public class Main
 		}
 		  
 		for(int servers=1;servers<=5;servers+=2){
-			//SLMS a=new SLMS(servers);	
-			MLMS a = new MLMS(servers);
-			a.evaluate(arrCustomers, servers, numOfCus);
+			SLMS a=new SLMS(servers);	
+			//MLMS b = new MLMS(servers);
+			a.evaluate(arrCustomers, numOfCus);
+			//b.evaluate(arrCustomers, numOfCus);
 			}
 		
 		//t1- tiempo en que tarda en procesar todos los customers

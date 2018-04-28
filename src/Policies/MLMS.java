@@ -1,7 +1,5 @@
-
 package Policies;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -19,37 +17,31 @@ public class MLMS {
 	//	}
 
 
-
-	Map<Integer,Customer>clerkMap= new TreeMap<>();
-	ArrayDeque<Customer> filaAtender = new ArrayDeque<Customer>();// processing	
-	//ArrayDeque<Customer> fila0,fila1,fila2,fila3,fila4 = new ArrayDeque<Customer>();// processing	
+private int servers;
+	Map<Integer,Customer>serversMap= new TreeMap<>();
 	Map<Integer,ArrayDeque<Customer>> filas =  new TreeMap<>();
-	//ArrayList<ArrayDeque>[] filas = new ArrayList{fila0,fila1,fila2,fila3,fila4};
-	//ArrayList<ArrayDeque> filasEspera=new ArrayList<>();
-	//filasEspera.add(fila0);
-
 	int[] tCurrent;   //guarde valores t que aumentan+1 para llegar y comparar con t+s y sacarlos del map
 
-
+	private int atendidos=0;
 
 	public MLMS(int servers ) {
 		tCurrent=new int[servers];
+		this.servers = servers;
 
 	}
 
-	public  void  evaluate(ArrayDeque<Customer> input, int servers,int numCust){		
+	public  void  evaluate(ArrayDeque<Customer> input,int numCust){		
 
-		int atendidos=0;
+	
 		double timer = 0;
-		double sumOfTimes = 0;//t1
+ 		double sumOfTimes = 0;//t1
 
 
 		//create empty servers
 		for(int i=0;i<servers;i++){
 
-			clerkMap.put(i, null);
-			filas.put(i, new ArrayDeque<Customer>());
-			
+			serversMap.put(i, null);
+			filas.put(i, new ArrayDeque<Customer>());			
 			tCurrent[i]=-2;
 
 		}
@@ -62,14 +54,14 @@ public class MLMS {
 			{//or el map contenga un customer	
 
 
-				//**SERVICE COMPLETED EVENT*// #1
+				//*SERVICE COMPLETED EVENT// #1
 
 				for(int i=0;i<servers;i++){
-					if((clerkMap.get(i))!=null &&
-							(clerkMap.get(i).getCurrentCustomerS()+ clerkMap.get(i).getArrivalEvent())==tCurrent[i]) {
+					if((serversMap.get(i))!=null 
+							&&(serversMap.get(i).getCurrentCustomerS()+ serversMap.get(i).getArrivalEvent())==tCurrent[i]) {
 
 						atendidos++;
-						sumOfTimes+=(timer-clerkMap.get(i).getArrivalEvent());
+						sumOfTimes+=(timer-serversMap.get(i).getArrivalEvent());
 						//metodo de limpiar posiciones
 						cleanServer(i);
 					}					
@@ -87,7 +79,7 @@ public class MLMS {
 				}				
 			}
 
-			//*ARRIVAL EVENT*// #4
+			//ARRIVAL EVENT// #4
 			for(Customer c : input) // acomoda el line queue por el orden de llegada (t) 
 				if(c.getArrivalEvent() == timer)
 					//filaAtender.add(c);
@@ -104,10 +96,10 @@ public class MLMS {
 	}
 
 	private  int shortestLineIndex() {
-		// TODO Auto-generated method stub
-		int index =0;
+		
+		int index =0;//fila 0 es el que menos personas tienes
 		for(int i = 1; i<filas.size();i++) {
-			if(filas.get(index).size()>filas.get(i).size())
+			if(filas.get(index).size()>filas.get(i).size())//0 y 1
 				index = i;
 		}
 		return index;
@@ -123,38 +115,45 @@ public class MLMS {
 		
 	}
 
-	//sirve para mover solo 1
+	//sirve para mover muchos 
 	public Map<Integer ,Customer> checkEmptyServer(int numS){//verifica de menor a mayor los servers,si estan vacios 
 		int serverN=0;
+		@SuppressWarnings("unused")
 		boolean isOccupied=false;
 
 		// while(serverN < numS && isOccupied ==false  && !filaAtender.isEmpty()){// servers de 0 a n
-		while(serverN < numS && isOccupied ==false  && !filas.get(serverN).isEmpty()) {
+		while(serverN < numS   ) {//si fila 1 de server 1 no esta vacia
 
-			// significa que el map no tiene a nadie
-			if(clerkMap.get(serverN)==null){	
-				System.out.println("clerk "+serverN + " is empty");
+			
+			if(serversMap.get(serverN)==null &&!filas.get(serverN).isEmpty()){	// server n de n fila esta vacio?
+				System.out.println("fila"+serverN+" contiene a alguien y el server"+serverN+" esta disponible");
 
 
-				clerkMap.put(serverN, filas.get(serverN).poll());
+				serversMap.put(serverN, filas.get(serverN).poll());
 
-				tCurrent[serverN]= clerkMap.get(serverN).getArrivalEvent();
+				tCurrent[serverN]= serversMap.get(serverN).getArrivalEvent();
 
-				isOccupied=true;
+				if(serversMap.get(serverN).getCurrentCustomerS()==0)
+			{
+				atendidos++;
+				cleanServer(serverN);
+				isOccupied = false;
+				serverN--;
 			}
+			}
+			
 			serverN++;
 		}
 
-		return clerkMap;
+		return serversMap;
 	}
 
 	private void cleanServer(int server) {
 
 
-		clerkMap.put(server,null);
+		serversMap.put(server,null);
 		tCurrent[server]=-2;
 
 
 	}
 }
-
