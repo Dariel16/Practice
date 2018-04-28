@@ -6,8 +6,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Policies.MLMS;
-import Policies.SLMS;
+//import Policies.MLMS;
+import Policies.SLMSAbi;
 
 
 
@@ -45,23 +45,14 @@ public class Main
 		}
 		  
 		for(int servers=1;servers<=5;servers+=2){
-			SLMS a=new SLMS(servers);	
+			SLMSAbi a = new SLMSAbi(servers);	
 			//MLMS b = new MLMS(servers);
-			a.evaluate(arrCustomers, numOfCus);
+				a.evaluate(arrCustomers);
 			//b.evaluate(arrCustomers, numOfCus);
-			}
-		
-		//t1- tiempo en que tarda en procesar todos los customers
-		//System.out.println("Total time in system is: " + sumOfTimes);
-		//double t2 = sumOfTimes/numOfCus; //promedio de esperar del input
-		//System.out.printf("Average waiting time for input file:  %.2f" ,t2);
+		}
+
 
 		
 	}
-	
-	//
-	//
 
-
-	
 }

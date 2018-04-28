@@ -9,19 +9,20 @@ public  class Server{
 		this.customer = null;
 	}
 
-	public void serve(Customer customer, int time,)
+	public void serve(Customer customer, int time)
 	{
 		this.customer = customer;
-		this.customer.setCurrentCustomerTime(time);
+		this.customer.setServiceStartTime(time);
 		this.isAvilable = false;
 	}
 
 	public Customer complete()
 	{
-		Customer temp = this.customer;
-		this.customer = null;
+		//Customer temp = this.customer;
+		//this.customer = null;
 		this.isAvilable = true;
-		return temp
+		//return temp;
+		return this.customer;
 	}
 
 	public boolean isAvilable(){

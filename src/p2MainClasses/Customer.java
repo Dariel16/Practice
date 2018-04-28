@@ -7,14 +7,12 @@ public  class Customer{
 	private int serviceCompleted;  // time when the service for this job is completed
 	private int currentCustomerTime;
 	private int serviceStart;
-	private int waitingTime;
 
 	public Customer(int id, int t, int s) { 
 		cusID = id; 
 		arrivalEvent = t;
 		currentCustomerTime= t;
 		customerS = s;
-		waitingTime = 0; 
 
 	}
 	public int getCompletedTime() {
@@ -47,10 +45,7 @@ public  class Customer{
 		serviceStart = timer;
 	}
 	public double getWaitingTime() {
-		return waitingTime;
-	}
-	public void setWaitingTime() {
-		waitingTime = serviceStart - arrivalEvent;
+		return serviceStart - arrivalEvent;
 	}
 
 
