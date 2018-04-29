@@ -65,9 +65,9 @@ public class SLMSAbi {
 			timer++;
 		}
 
-		System.out.println("Total time in system is: " + timer);
+		System.out.println("T1 "+servers+" is: " + timer);
 		
-		System.out.println("Average waiting time per customer: " + aveWaitingTime() );
+		System.out.println("T2(Avg) "+servers+" is: " + aveWaitingTime() );
 		
 		System.out.println("M: 0");
 

@@ -46,10 +46,16 @@ public class Main
 
 		for(int servers=1;servers<=5;servers+=2){
 			SLMSAbi a = new SLMSAbi(servers);	
-			MLMS b = new MLMS(servers);
-			MLMSBLL c= new MLMSBLL(servers);
 			a.evaluate(arrCustomers);
-			b.evaluate(arrCustomers, numOfCus);
+			
+		}
+		for(int servers=1;servers<=5;servers+=2){				
+			MLMS b = new MLMS(servers);			
+			b.evaluate(arrCustomers, numOfCus);		
+		}
+		
+		for(int servers=1;servers<=5;servers+=2){		
+			MLMSBLL c= new MLMSBLL(servers);
 			c.evaluate(arrCustomers, numOfCus);
 		}
 

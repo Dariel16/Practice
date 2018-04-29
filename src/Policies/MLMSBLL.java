@@ -91,9 +91,10 @@ public class MLMSBLL {
 
 			timer++;
 		}
-		System.out.println("Total time in system is: " + sumOfTimes);
+		System.out.println();
+		System.out.println("T1 MLMSBLL "+servers+" is  : " + timer);
 		double t2 = sumOfTimes/numCust; //promedio de esperar del input
-		System.out.printf("Average waiting time for :" + aveWaitingTime());
+		System.out.printf("Avg time MLMBLL "+servers+" is :" + aveWaitingTime());
 		System.out.println();
 		sumOfTimes=0;
 	}

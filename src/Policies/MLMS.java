@@ -87,9 +87,10 @@ public class MLMS {
 
 			timer++;
 		}
-		System.out.println("Total time in system is: " + sumOfTimes);
+		System.out.println();;
+		System.out.println("T1 MLMS "+servers+" is : " + timer);
 		//double t2 = sumOfTimes/numCust; //promedio de esperar del input
-		System.out.printf("Average waiting time for :" + aveWaitingTime());
+		System.out.printf("T2 MLMS  "+servers+" is  :" + aveWaitingTime());
 		System.out.println();
 		sumOfTimes=0;
 	}
