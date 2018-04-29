@@ -106,7 +106,7 @@ public class SLMS {
 
 			// significa que el map no tiene a nadie
 			if(clerkMap.get(serverN)==null){	
-				System.out.println("clerk "+serverN + " is empty");
+			//	System.out.println("clerk "+serverN + " is empty");
 
 
 				clerkMap.put(serverN, filaAtender.poll());

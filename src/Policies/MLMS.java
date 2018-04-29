@@ -1,6 +1,6 @@
 package Policies;
 import java.util.ArrayDeque;
-
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -13,34 +13,27 @@ import p2MainClasses.Customer;
 public class MLMS {
 
 
-	//	public EnterQVal(int name){
-	//		//super(name);
-	//	}
-
-
-
+	private int timer = 0;
 	Map<Integer,Customer>serversMap= new TreeMap<>();
-	//ArrayDeque<Customer> filaAtender = new ArrayDeque<Customer>();// processing	
-	//ArrayDeque<Customer> fila0,fila1,fila2,fila3,fila4 = new ArrayDeque<Customer>();// processing	
 	Map<Integer,ArrayDeque<Customer>> filas =  new TreeMap<>();
-	//ArrayList<ArrayDeque>[] filas = new ArrayList{fila0,fila1,fila2,fila3,fila4};
-	//ArrayList<ArrayDeque> filasEspera=new ArrayList<>();
-	//filasEspera.add(fila0);
-
+	ArrayList<Customer> completed = new ArrayList<>();
+	private int servers;
 	int[] tCurrent;   //guarde valores t que aumentan+1 para llegar y comparar con t+s y sacarlos del map
 
 	private int atendidos=0;
 
+
 	public MLMS(int servers ) {
+		this.servers = servers;
 		tCurrent=new int[servers];
 
 	}
 
-	public  void  evaluate(ArrayDeque<Customer> input, int servers,int numCust){		
+	public  void  evaluate(ArrayDeque<Customer> input, int numCust){		
 
-	
-		double timer = 0;
- 		double sumOfTimes = 0;//t1
+
+
+		double sumOfTimes = 0;//t1
 
 
 		//create empty servers
@@ -95,14 +88,14 @@ public class MLMS {
 			timer++;
 		}
 		System.out.println("Total time in system is: " + sumOfTimes);
-		double t2 = sumOfTimes/numCust; //promedio de esperar del input
-		System.out.printf("Average waiting time for input file:  %.2f" ,t2);
+		//double t2 = sumOfTimes/numCust; //promedio de esperar del input
+		System.out.printf("Average waiting time for :" + aveWaitingTime());
 		System.out.println();
 		sumOfTimes=0;
 	}
 
 	private  int shortestLineIndex() {
-		
+
 		int index =0;//fila 0 es el que menos personas tienes
 		for(int i = 1; i<filas.size();i++) {
 			if(filas.get(index).size()>filas.get(i).size())//0 y 1
@@ -110,15 +103,15 @@ public class MLMS {
 		}
 		return index;
 	}
-	
+
 	private boolean allLinesEmpty() {
-	
+
 		for(int i=0; i<filas.size(); i++) {
 			if(!filas.get(i).isEmpty())
 				return false;
 		}
 		return true;
-		
+
 	}
 
 	//sirve para mover muchos 
@@ -129,24 +122,26 @@ public class MLMS {
 		// while(serverN < numS && isOccupied ==false  && !filaAtender.isEmpty()){// servers de 0 a n
 		while(serverN < numS   ) {//si fila 1 de server 1 no esta vacia
 
-			
+
 			if(serversMap.get(serverN)==null &&!filas.get(serverN).isEmpty()){	// server n de n fila esta vacio?
-				System.out.println("fila"+serverN+" contiene a alguien y el server"+serverN+" esta disponible");
+				//System.out.println("line "+serverN+" is not empty, server "+serverN+" is available");
+
 
 
 				serversMap.put(serverN, filas.get(serverN).poll());
+				serversMap.get(serverN).setServiceStartTime(timer);
 
 				tCurrent[serverN]= serversMap.get(serverN).getArrivalEvent();
 
 				if(serversMap.get(serverN).getCurrentCustomerS()==0)
-			{
-				atendidos++;
-				cleanServer(serverN);
-				isOccupied = false;
-				serverN--;
+				{
+					atendidos++;
+					cleanServer(serverN);
+					isOccupied = false;
+					serverN--;
+				}
 			}
-			}
-			
+
 			serverN++;
 		}
 
@@ -155,10 +150,15 @@ public class MLMS {
 
 	private void cleanServer(int server) {
 
-
+		completed.add(serversMap.get(server));
 		serversMap.put(server,null);
 		tCurrent[server]=-2;
-
-
+	}
+	private double aveWaitingTime() {
+		int sum=0;
+		for(int i=0; i<completed.size();i++) {
+			sum += completed.get(i).getWaitingTime();
+		}
+		return (sum/completed.size())*100;
 	}
 }
