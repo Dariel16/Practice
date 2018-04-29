@@ -3,7 +3,6 @@ package p2MainClasses;
 
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import Policies.*;
@@ -22,8 +21,7 @@ public class Main
 		//craer 7 queueus
 		//usar metodo clear para borrar el completedCostumer cada vez que termine de atender a todos,luego usarlo con otro metodo
 		ArrayDeque<Customer> arrCustomers = new ArrayDeque();
-		ArrayDeque<Customer> lineArrQueue = new ArrayDeque();// processing
-		ArrayList<Customer>	completedCustomer = new ArrayList<>();
+		
 
 		Scanner in = new Scanner(System.in);
 
@@ -51,12 +49,17 @@ public class Main
 		}
 		for(int servers=1;servers<=5;servers+=2){				
 			MLMS b = new MLMS(servers);			
-			b.evaluate(arrCustomers, numOfCus);		
+			b.evaluate(arrCustomers);		
 		}
 		
 		for(int servers=1;servers<=5;servers+=2){		
 			MLMSBLL c= new MLMSBLL(servers);
-			c.evaluate(arrCustomers, numOfCus);
+			c.evaluate(arrCustomers);
+		}
+		
+		for(int servers=1;servers<=5;servers+=2){		
+			MLMSBWT d= new MLMSBWT(servers);
+			d.evaluate(arrCustomers);
 		}
 
 

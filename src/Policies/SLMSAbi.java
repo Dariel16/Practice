@@ -1,6 +1,6 @@
 package Policies;
 import java.util.ArrayDeque;
-import java.util.Map;
+
 import java.util.HashMap;
 
 import p2MainClasses.Customer;
@@ -9,7 +9,7 @@ import p2MainClasses.Server;
 public class SLMSAbi {
 
 	int servers;
-	ArrayDeque<Customer> filaAtender;
+	ArrayDeque<Customer> line;
 	ArrayDeque<Customer> completed;
 	HashMap<Server, ArrayDeque<Customer>> clerkMap;
 
@@ -30,7 +30,7 @@ public class SLMSAbi {
 			clerkMap.put(new Server(), null);
 		}
 
-		this.filaAtender = new ArrayDeque<Customer>();
+		this.line = new ArrayDeque<Customer>();
 		this.completed = new ArrayDeque<Customer>();
 
 		while(completed.size() != input.size())//nos dice cuando atendimos a todos
@@ -48,7 +48,7 @@ public class SLMSAbi {
 				}
 				else
 				{
-					Customer nextCustomer = filaAtender.poll();
+					Customer nextCustomer = line.poll();
 					if(nextCustomer != null)
 						serv.serve(nextCustomer, timer);
 				}
@@ -58,7 +58,7 @@ public class SLMSAbi {
 			{
 				if(timer==cus.getArrivalEvent())
 				{
-					filaAtender.add(cus);
+					line.add(cus);
 				}
 			}
 
