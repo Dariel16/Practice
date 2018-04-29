@@ -49,7 +49,7 @@ public class MLMS {
 
 				for(int i=0;i<servers;i++){
 					if((serversMap.get(i))!=null 	
-						&&(serversMap.get(i).getCurrentCustomerS()+ serversMap.get(i).getArrivalEvent())==serversMap.get(i).getCurrentCustomerTime()) {
+							&&(serversMap.get(i).getCurrentCustomerS()+ serversMap.get(i).getServiceStartTime())==serversMap.get(i).getCurrentCustomerTime()) {
 						
 						//metodo de limpiar posiciones
 						cleanServer(i);
@@ -77,8 +77,8 @@ public class MLMS {
 		}
 		
 		System.out.println();;
-		System.out.println("T1 MLMS "+servers+" is : " + timer);
-		System.out.printf("T2 MLMS  "+servers+" is  :" + aveWaitingTime());
+		System.out.println("T1 MLMS "+servers+" is: " + timer);
+		System.out.printf("T2 MLMS "+servers+" is: %.2f",aveWaitingTime());
 		System.out.println();
 		
 	}
@@ -115,8 +115,8 @@ public class MLMS {
 
 			if(serversMap.get(serverN)==null &&!lines.get(serverN).isEmpty()){	// server n de n fila esta vacio?
 				serversMap.put(serverN, lines.get(serverN).poll());
-				serversMap.get(serverN).setServiceStartTime(serversMap.get(serverN).getArrivalEvent());
-				serversMap.get(serverN).setCurrentCustomerTime(serversMap.get(serverN).getArrivalEvent());
+				serversMap.get(serverN).setServiceStartTime(timer);
+				serversMap.get(serverN).setCurrentCustomerTime(timer);
 				
 
 				if(serversMap.get(serverN).getCurrentCustomerS()==0)
@@ -141,10 +141,10 @@ public class MLMS {
 		
 	}
 	private double aveWaitingTime() {
-		int sum=0;
+		double sum=0;
 		for(int i=0; i<completed.size();i++) {
 			sum += completed.get(i).getWaitingTime();
 		}
-		return (sum/completed.size())*100;
+		return (sum/completed.size());
 	}
 }

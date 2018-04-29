@@ -43,7 +43,7 @@ public class Main
 		}
 
 		for(int servers=1;servers<=5;servers+=2){
-			SLMSAbi a = new SLMSAbi(servers);	
+			SLMS a = new SLMS(servers);	
 			a.evaluate(arrCustomers);
 			
 		}
