@@ -1,4 +1,5 @@
 package Policies;
+import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Map;
@@ -6,9 +7,12 @@ import java.util.TreeMap;
 
 import p2MainClasses.Customer;
 /**
- * 
- * @author Jeffrey
- *
+ * Forth policy - This scheme is similar to the previous two. 
+ * The monitor decides which line the new arriving customer has  to go to. 
+ * The decision is based on the total expected time on each line. 
+ * The new customer will be assigned to the first line having minimum total waiting time at that moment.
+ * @author Jeffrey Pagan
+ * @author Dariel Ramos
  */
 public class MLMSBWT {
 
@@ -21,13 +25,21 @@ public class MLMSBWT {
 	int[] sLines;
 
 
-
+	/**
+	 * Constructor
+	 * get the amount of server to use at the time
+	 * @param servers
+	 */
 	public MLMSBWT(int servers ) {
 		this.servers = servers;
 		sLines = new int[servers];
 
 	}
-
+	/**
+	 * Method that analyze the customers with their different values, and different servers
+	 * @param input - ArrayQueue of all the customers to set on the line to be served 
+	 * 
+	 */
 	public  void  evaluate(ArrayDeque<Customer> input){		
 
 		//create empty servers
@@ -75,15 +87,17 @@ public class MLMSBWT {
 
 			timer++;
 		}
-		System.out.println();
-		System.out.println("T1 MLMSBWT "+servers+" is: " + timer);
-		System.out.printf("T2 MLMSBWT "+servers+" is: %.2f",aveWaitingTime());
-		System.out.println();
+		double T2=aveWaitingTime();
+		double m=calculateSumFastPeople()/completed.size();
+		DecimalFormat f=new DecimalFormat("#.00");
+		System.out.println("SLMS "+servers+": " + timer+"  "+f.format(T2)+" "+f.format(m));
 
 	}
 
-
-
+	/**
+	 * Method to that calculate the line with the less waiting time
+	 * @return the index of the line with less waiting time
+	 */
 	private int lessWaitingTimeIndex(){// devuelve la fila con menos s time
 		int index=0;
 		for(int i=1;i<servers;i++){
@@ -97,12 +111,21 @@ public class MLMSBWT {
 		return index;
 	}
 	//anade s a tal fila n
+	/**
+	 * Method that stored in a Array the sum of the S of each customer in each line
+	 * @param index - line from which we will calculate the s
+	 * @param s - the s of each customer
+	 * @return 
+	 */
 	public int[] addSToIndex(int index,int s){
 
 		sLines[index] = sLines[index]+ s;
 		return sLines;
 	}
-
+	/**
+	 * Method to analyze if all the lines are empty
+	 * @return true if the lines are empty.
+	 */
 	private boolean allLinesEmpty() {
 
 		for(int i=0; i<lines.size(); i++) {
@@ -112,7 +135,11 @@ public class MLMSBWT {
 		return true;
 
 	}
-
+/**
+	 * Method to check if the server is empty to get another customer
+	 * @param numS - number of server to check
+	 * @return serversMap - map of clerks(servers) that analyze each customer. serversMap< # of server, customer>
+	 */
 	//sirve para mover muchos 
 	@SuppressWarnings("unused")
 	public Map<Integer ,Customer> checkEmptyServer(int numS){//verifica de menor a mayor los servers,si estan vacios 
@@ -122,7 +149,7 @@ public class MLMSBWT {
 		while(serverN < numS) {//si fila 1 de server 1 no esta vacia
 
 			if(serversMap.get(serverN)==null &&!lines.get(serverN).isEmpty()){	// server n de n fila esta vacio?
-	
+
 				serversMap.put(serverN, lines.get(serverN).poll());
 				serversMap.get(serverN).setServiceStartTime(timer);
 				serversMap.get(serverN).setCurrentCustomerTime(timer);
@@ -142,17 +169,38 @@ public class MLMSBWT {
 
 		return serversMap;
 	}
-
+	/**
+	 * method to clean the server given and move the customer to completed
+	 * @param server - server to be clean
+	 */
 	private void cleanServer(int server) {
 		completed.add(serversMap.get(server));
 		serversMap.put(server,null);
 	}
-	
+	/**
+	 * Method to calculate the average waiting time of all the customers
+	 * @return the average waiting time
+	 */
 	private double aveWaitingTime() {
 		double sum=0;
 		for(int i=0; i<completed.size();i++) {
 			sum += completed.get(i).getWaitingTime();
 		}
 		return (sum/completed.size());
+	}
+	/**
+	 * Method to calculate the number of customer that got in line after certain customer but got served before
+	 * @return 
+	 */
+	public double calculateSumFastPeople(){
+		int fastPeople=0;
+		for(int pEvaluar=completed.size()-1;pEvaluar>0;pEvaluar--){		
+			for(int ipAntes=0;ipAntes < pEvaluar;ipAntes ++){			
+				if(completed.get(ipAntes).getArrivalEvent()>completed.get(pEvaluar).getArrivalEvent() ){				
+					fastPeople++;
+				}
+			}
+		}	
+		return fastPeople;
 	}
 }

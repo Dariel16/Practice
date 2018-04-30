@@ -1,4 +1,5 @@
 package Policies;
+import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Map;
@@ -7,9 +8,12 @@ import java.util.TreeMap;
 
 import p2MainClasses.Customer;
 /**
- * 
- * @author Jeffrey
- *
+ * Third policy -This case is similar to the previous policy but a customer 
+ * is not stuck to the line he/she initially chooses as in that one. 
+ * This scheme includes a monitor (a person or a specialized device) that decides when, 
+ * and to what line, a person already in one of the lines can transfer to.
+ * @author Jeffrey Ramos
+ * @author Dariel Ramos
  */
 public class MLMSBLL {
 	private int timer;
@@ -20,14 +24,22 @@ public class MLMSBLL {
 	private int servers;
 
 
-	
 
 
+	/**
+	 * Constructor
+	 * get the amount of server to use at the time
+	 * @param servers
+	 */
 	public MLMSBLL(int servers ) {
 		this.servers = servers;
 
 	}
-
+	/**
+	 * Method that analyze the customers with their different values, and different servers
+	 * @param input - ArrayQueue of all the customers to set on the line to be served 
+	 * 
+	 */
 	public  void  evaluate(ArrayDeque<Customer> input){		
 
 		//create empty servers
@@ -35,7 +47,7 @@ public class MLMSBLL {
 
 			serversMap.put(i, null);
 			lines.put(i, new ArrayDeque<Customer>());			
-		
+
 
 		}
 
@@ -53,7 +65,7 @@ public class MLMSBLL {
 					if((serversMap.get(i))!=null 
 							&&(serversMap.get(i).getCurrentCustomerS()+ serversMap.get(i).getServiceStartTime())==serversMap.get(i).getCurrentCustomerTime()) {
 
-						
+
 						//metodo de limpiar posiciones
 						cleanServer(i);
 					}					
@@ -77,24 +89,27 @@ public class MLMSBLL {
 			for(Customer c : input) // acomoda el line queue por el orden de llegada (t) 
 				if(c.getArrivalEvent() == timer)	
 					lines.get(shortestLineIndex()).add(c);
-					
+
 			timer++;
 		}
-		System.out.println();
-		System.out.println("T1 MLMSBLL "+servers+" is: " + timer);
-		System.out.printf("T2 MLMSBLL "+servers+" is: %.2f",aveWaitingTime());
-		System.out.println();
-	
+		double T2=aveWaitingTime();
+		double m=calculateSumFastPeople()/completed.size();
+		DecimalFormat f=new DecimalFormat("#.00");
+		System.out.println("SLMS "+servers+": " + timer+"  "+f.format(T2)+" "+f.format(m));
+
 	}
 
-
-	//sirve para mover muchos 
+	/**
+	 * Method to check if the server is empty to get another customer
+	 * @param numS - number of server to check
+	 * @return serversMap - map of clerks(servers) that analyze each customer. serversMap< # of server, customer>
+	 */
 	@SuppressWarnings("unused")
 	public Map<Integer ,Customer> checkEmptyServer(int numS){//verifica de menor a mayor los servers,si estan vacios 
 		int serverN=0;
 		boolean isOccupied=false;
 
-		
+
 		while(serverN < numS   ) {//si fila 1 de server 1 no esta vacia
 
 
@@ -118,7 +133,10 @@ public class MLMSBLL {
 
 		return serversMap;
 	}
-
+	/**
+	 * Method to analyze which of all lines is the shortest
+	 * @return index - the index of the shortest line
+	 */
 	private  int shortestLineIndex() {
 
 		int index =0;//fila 0 es el que menos personas tienes
@@ -128,6 +146,10 @@ public class MLMSBLL {
 		}
 		return index;
 	}
+	/**
+	 * Method to analyze which of all lines is the longest
+	 * @return index - the index of the longest line
+	 */
 	private  int longestLineIndex() {
 
 		int index =0;//fila 0 es el que menos personas tienes
@@ -137,7 +159,10 @@ public class MLMSBLL {
 		}
 		return index;
 	}
-
+	/**
+	 * Method to analyze if all the lines are empty
+	 * @return true if the lines are empty.
+	 */
 	private boolean allLinesEmpty() {
 
 		for(int i=0; i<lines.size(); i++) {
@@ -146,14 +171,20 @@ public class MLMSBLL {
 		}
 		return true;
 	}
-
+	/**
+	 * method to clean the server given and move the customer to completed
+	 * @param server - server to be clean
+	 */
 	private void cleanServer(int server) {
 
 		completed.add(serversMap.get(server));
 		serversMap.put(server,null);
 
 	}
-
+	/**
+	 * Method to calculate the average waiting time of all the customers
+	 * @return the average waiting time
+	 */
 	private double aveWaitingTime() {
 		double sum=0;
 		for(int i=0; i<completed.size();i++) {
@@ -161,7 +192,9 @@ public class MLMSBLL {
 		}
 		return (sum/completed.size());
 	}
-
+	/**
+	 * method that monitors the lines, and balanced the lines lenghts
+	 */
 	private void monitorLines() {
 		int sli = shortestLineIndex();
 		int lli= longestLineIndex();
@@ -169,5 +202,20 @@ public class MLMSBLL {
 			lines.get(sli).add(lines.get(lli).pollLast());
 		}
 
+	}
+	/**
+	 * Method to calculate the number of customer that got in line after certain customer but got served before
+	 * @return 
+	 */
+	public double calculateSumFastPeople(){
+		int fastPeople=0;
+		for(int pEvaluar=completed.size()-1;pEvaluar>0;pEvaluar--){		
+			for(int ipAntes=0;ipAntes < pEvaluar;ipAntes ++){			
+				if(completed.get(ipAntes).getArrivalEvent()>completed.get(pEvaluar).getArrivalEvent() ){				
+					fastPeople++;
+				}
+			}
+		}	
+		return fastPeople;
 	}
 }

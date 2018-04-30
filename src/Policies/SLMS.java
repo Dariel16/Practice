@@ -1,11 +1,19 @@
 package Policies;
+import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
 import p2MainClasses.Customer;
-
+/**
+ * First Policy - Under this policy, there is only one waiting line and one or more service posts. 
+ * Whenever a post is available, the first person in line, if any, will start to be served by the service person at the post. 
+ * In the case in which there are more than one server available at a moment, 
+ * then the first person in line will go to the available post having  min index value among those available. 
+ * @author Jeffrey Pagan
+ *@author Dariel Ramos
+ */
 public class SLMS {
 
 
@@ -19,13 +27,21 @@ public class SLMS {
 	
 	int servers; 
 
-
+	/**
+	 * Constructor
+	 * get the amount of server to use at the time
+	 * @param servers
+	 */
 	public SLMS(int servers ) {
 		
 		this.servers=servers;
 
 	}
-
+	/**
+	 * Method that analyze the customers with their different values, and different servers
+	 * @param input - ArrayQueue of all the customers to set on the line to be served 
+	 * 
+	 */
 	public  void  evaluate(ArrayDeque<Customer> input){		
 
 
@@ -74,14 +90,18 @@ public class SLMS {
 			timer++;
 		}
 	
-		System.out.println();;
-		System.out.println("T1 SLMS "+servers+" is: " + timer);
-		System.out.printf("T2 SLMS "+servers+" is: %.2f",aveWaitingTime());
-		System.out.println();
+		double T2=aveWaitingTime();
+		double m=calculateSumFastPeople()/completed.size();
+		DecimalFormat f=new DecimalFormat("#.00");
+		System.out.println("SLMS "+servers+": " + timer+"  "+f.format(T2)+" "+f.format(m));
 
 	}
 
-	//sirve para mover solo 1
+	/**
+	 * Method to check if the server is empty to get another customer
+	 * @param numS - number of server to check
+	 * @return serversMap - map of clerks(servers) that analyze each customer. serversMap< # of server, customer>
+	 */
 	public Map<Integer ,Customer> checkEmptyServer(int numS){//verifica de menor a mayor los servers,si estan vacios 
 		int serverN=0;
 		boolean isOccupied=false;
@@ -109,20 +129,40 @@ public class SLMS {
 
 		return clerkMap;
 	}
-
+	/**
+	 * method to clean the server given and move the customer to completed
+	 * @param server - server to be clean
+	 */
 	private void cleanServer(int server) {
 		completed.add(clerkMap.get(server));
 		clerkMap.put(server,null);
-	
-
 
 	}
+	/**
+	 * Method to calculate the average waiting time of all the customers
+	 * @return the average waiting time
+	 */
 	private double aveWaitingTime() {
 		double sum=0;
 		for(int i=0; i<completed.size();i++) {
 			sum += completed.get(i).getWaitingTime();
 		}
 		return (sum/completed.size());
+	}
+	/**
+	 * Method to calculate the number of customer that got in line after certain customer but got served before
+	 * @return 
+	 */
+	public double calculateSumFastPeople(){
+		int fastPeople=0;
+		for(int pEvaluar=completed.size()-1;pEvaluar>0;pEvaluar--){		
+			for(int ipAntes=0;ipAntes < pEvaluar;ipAntes ++){			
+				if(completed.get(ipAntes).getArrivalEvent()>completed.get(pEvaluar).getArrivalEvent() ){				
+					fastPeople++;
+				}
+			}
+		}	
+		return fastPeople;
 	}
 	
 }
