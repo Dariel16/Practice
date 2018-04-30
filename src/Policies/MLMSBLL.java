@@ -95,7 +95,7 @@ public class MLMSBLL {
 		double T2=aveWaitingTime();
 		double m=calculateSumFastPeople()/completed.size();
 		DecimalFormat f=new DecimalFormat("#.00");
-		System.out.println("SLMS "+servers+": " + timer+"  "+f.format(T2)+" "+f.format(m));
+		System.out.println("MLMSBLL "+servers+": " + timer+"  "+f.format(T2)+" "+f.format(m));
 
 	}
 
@@ -211,7 +211,8 @@ public class MLMSBLL {
 		int fastPeople=0;
 		for(int pEvaluar=completed.size()-1;pEvaluar>0;pEvaluar--){		
 			for(int ipAntes=0;ipAntes < pEvaluar;ipAntes ++){			
-				if(completed.get(ipAntes).getArrivalEvent()>completed.get(pEvaluar).getArrivalEvent() ){				
+				if(completed.get(ipAntes).getArrivalEvent()>completed.get(pEvaluar).getArrivalEvent()
+						&& completed.get(ipAntes).getServiceStartTime()<completed.get(pEvaluar).getServiceStartTime()){				
 					fastPeople++;
 				}
 			}
